@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Chat Analyzer</title>
+    <!-- Include html2canvas library before jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <!-- Include DOMPurify library to avoid errors related to HTML sanitization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+
+    <!-- Include jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>WhatsApp Chat Analyzer</h1>
+    <nav class="nav-container">
+      <button onclick="analyzeChat()" id="Analyze-Chat" class="nav-button">
+        Analyze Chat
+      </button>
+      <button id="Display-Chat" class="nav-button" onclick="showChat()">
+        View Chat
+      </button>
+    </nav>
+    <p id="info1" class="info">
+      Gain valuable insights from your conversations — now featuring more
+      engaging graphs and free statistics.
+    </p>
+
+    <p id="info" class="info">
+      <b>No</b> <b>chat data</b> is ever transmitted to a
+      <b>server!</b> Everything runs <b>locally</b> in your <b>browser</b>.
+    </p>
+
+    <p id="info2" class="info">
+      This project is <b>open-source</b> and all the code is <b>public</b> on
+      <b>GitHub</b>.
+      <a
+        style="color: black"
+        href="http://"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Explore it here.
+      </a>
+    </p>
+
+    <div class="upload-container">
+      <!-- File input for uploading the chat data -->
+      <!-- <label for="chatFile" class="file-label">Choose File</label> -->
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          gap: 5px;
+          margin-left: -10px;
+        "
+      >
+        <input type="file" class="file-label" id="chatFile" accept=".txt" />
+        <button class="load-btn" onclick="loadChatData()">Load File</button>
+      </div>
+    </div>
+
+    <div id="results">
+      <h2>Analysis Report</h2>
+      <hr />
+      <h4>First Messages</h4>
+      <ul>
+        <li id="first-msg-one"></li>
+        <li id="first-msg-two"></li>
+      </ul>
+      <hr />
+      <h4>Last Messages</h4>
+      <ul>
+        <li id="last-msg-one"></li>
+        <li id="last-msg-two"></li>
+      </ul>
+      <hr />
+      <p id="daysCount"></p>
+      <hr />
+      <h4>Exteme Days</h4>
+      <ul>
+        <li>
+          <strong>Most Active Day:</strong> <span id="mostActiveDay"></span>
+        </li>
+        <li>
+          <strong>Least Active Day:</strong> <span id="leastActiveDay"></span>
+        </li>
+      </ul>
+      <hr />
+      <div id="userStatsContainer">
+        <h4>User Statistics</h4>
+        <ul id="userStatsList"></ul>
+        <!-- List for user stats -->
+        <div id="chartsContainer"></div>
+        <!-- Container for the charts -->
+      </div>
+      <hr />
+      <h4>Days without chatting</h4>
+      <ul id="missedDays"></ul>
+      <hr />
+
+      <div id="canv">
+        <canvas id="messageFrequencyChart" width="400" height="200"></canvas>
+        <canvas id="chattingTimeChart" width="400" height="200"></canvas>
+        <div
+          style="
+            width: 300px;
+            margin-left: 20%;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+          "
+        >
+          <canvas id="responseTimeChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- <button onclick="downloadPDF()">Download Report as PDF</button> -->
+    <div id="chatViewer"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
