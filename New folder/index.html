@@ -29,31 +29,29 @@
       Gain valuable insights from your conversations — now featuring more
       engaging graphs and free statistics.
     </p>
-    <div id="infoo">
-      <p id="info" class="info">
-        <b>No</b> <b>chat data</b> is ever transmitted to a
-        <b>server!</b> Everything runs <b>locally</b> in your <b>browser</b>.
-      </p>
 
-      <p id="info2" class="info">
-        This project is <b>open-source</b> and all the code is <b>public</b> on
-        <b>GitHub</b>.
-        <a
-          style="color: black"
-          href="https://github.com/M-Saad-mizri/WhatsApp-Chat-Analyzer"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Explore it here.
-        </a>
-      </p>
-    </div>
+    <p id="info" class="info">
+      <b>No</b> <b>chat data</b> is ever transmitted to a
+      <b>server!</b> Everything runs <b>locally</b> in your <b>browser</b>.
+    </p>
 
-    <div class="content-div" id="moving-border">
-      <h2>Export WhatsApp Chat and Select File</h2>
+    <p id="info2" class="info">
+      This project is <b>open-source</b> and all the code is <b>public</b> on
+      <b>GitHub</b>.
+      <a
+        style="color: black"
+        href="https://github.com/M-Saad-mizri/WhatsApp-Chat-Analyzer"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Explore it here.
+      </a>
+    </p>
+    <div class="moving-border">
+      <h2>Export WhatsApp Chat and Unzip to get .txt File</h2>
       <p>
-        <span>To begin</span>, select or drop a .txt or .zip file containing
-        your WhatsApp chat file.
+        To begin, select a .txt file containing your WhatsApp chat export
+        folder.
       </p>
     </div>
 
@@ -69,12 +67,7 @@
           margin-left: -10px;
         "
       >
-        <input
-          type="file"
-          class="file-label"
-          id="chatFile"
-          accept=".txt, .zip"
-        />
+        <input type="file" class="file-label" id="chatFile" accept=".txt" />
         <button class="load-btn" onclick="loadChatData()">Load File</button>
       </div>
     </div>

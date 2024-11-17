@@ -1,3 +1,30 @@
+// let chatData = ""; // Initialize chatData to hold chat content
+// let messages = []; // Initialize messages globally
+
+// function loadChatData() {
+//     const infoElements = document.querySelectorAll('.info');
+//     infoElements.forEach(function (element) {
+//         element.style.display = 'none';
+//     });
+
+//     document.getElementById("Display-Chat").style.display = "flex";
+//     document.getElementById("Analyze-Chat").style.display = "flex";
+//     const fileInput = document.getElementById("chatFile");
+//     const file = fileInput.files[0];
+
+//     if (file) {
+//         const reader = new FileReader();
+//         reader.onload = function (event) {
+//             chatData = event.target.result; // Load file content into chatData
+//         };
+//         reader.readAsText(file);
+//     } else {
+//         alert("Please upload a chat file.");
+//         document.getElementById("Display-Chat").style.display = "none";
+//         document.getElementById("Analyze-Chat").style.display = "none";
+//     }
+// }
+
 let chatData = ""; // Initialize chatData to hold chat content
 let messages = []; // Initialize messages globally
 
@@ -9,52 +36,82 @@ function loadChatData() {
 
     document.getElementById("Display-Chat").style.display = "flex";
     document.getElementById("Analyze-Chat").style.display = "flex";
+    document.getElementById("moving-border").style.display = "none";
     const fileInput = document.getElementById("chatFile");
     const file = fileInput.files[0];
 
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            chatData = event.target.result; // Load file content into chatData
-        };
-        reader.readAsText(file);
+        if (file.name.endsWith(".zip")) {
+            // If it's a zip file, handle it with JSZip
+            handleZipFile(file);
+        } else if (file.name.endsWith(".txt")) {
+            // If it's a .txt file, handle it normally
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                chatData = event.target.result; // Load file content into chatData
+                displayChatContent(chatData); // Display or process the chat content
+            };
+            reader.readAsText(file);
+        } else {
+            alert("Please upload a valid .txt or .zip chat file.");
+            document.getElementById("Display-Chat").style.display = "none";
+            document.getElementById("Analyze-Chat").style.display = "none";
+            document.getElementById("infoo").style.display = "flex";
+            document.getElementById("info").style.display = "flex";
+            document.getElementById("info1").style.display = "block";
+            document.getElementById("info2").style.display = "flex";
+            document.getElementById("moving-border").style.display = "block";
+        }
     } else {
         alert("Please upload a chat file.");
         document.getElementById("Display-Chat").style.display = "none";
         document.getElementById("Analyze-Chat").style.display = "none";
+        document.getElementById("infoo").style.display = "flex";
+        document.getElementById("info").style.display = "flex";
+        document.getElementById("info1").style.display = "block";
+        document.getElementById("info2").style.display = "flex";
+        document.getElementById("moving-border").style.display = "block";
     }
-} function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Capture the HTML content of the chat report
-    const chatContent = document.getElementById("results").innerHTML;
-
-    // Add the content to the PDF
-    doc.html(chatContent, {
-        callback: function (doc) {
-            // Save the generated PDF
-            doc.save('whatsapp-chat-report.pdf');
-        },
-        x: 10,
-        y: 10
-    });
 }
 
-const stopWords = [
-    "the",
-    "is",
-    "and",
-    "a",
-    "to",
-    " in ",
-    "for",
-    " of ",
-    "it",
-    "on",
-    "that",
-    "this",
-]; // Basic list of stop words
+function handleZipFile(zipFile) {
+    const zip = new JSZip();
+    const fileName = zipFile.name;
+
+    // Load and extract the .zip file content
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        zip.loadAsync(event.target.result).then(function (contents) {
+            // Find a .txt file in the zip archive
+            const txtFiles = Object.keys(contents.files).filter(file => file.endsWith(".txt"));
+
+            if (txtFiles.length === 0) {
+                alert("No .txt file found in the zip archive.");
+                return;
+            }
+
+            // Read the first .txt file found in the zip
+            const txtFile = contents.files[txtFiles[0]];
+            txtFile.async("text").then(function (txtContent) {
+                chatData = txtContent; // Load the content of the .txt file into chatData
+                displayChatContent(chatData); // Display or process the chat content
+            });
+        }).catch(function (error) {
+            alert("Error loading zip file: " + error);
+        });
+    };
+    reader.readAsArrayBuffer(zipFile);
+}
+
+function displayChatContent(data) {
+    // This function can display chat data or trigger further analysis
+    console.log("Chat Content Loaded: ", data);
+    // Now you can pass this `data` to the `parseChat` function
+    const parsedData = parseChat(data);
+
+    // Example: Displaying parsed messages or stats
+    console.log(parsedData);
+}
 
 function parseChat(data) {
     const messages = [];
@@ -112,6 +169,97 @@ function parseChat(data) {
 
     return { messages, dayCount, responseTimes, userStats, wordFrequency };
 }
+
+
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Capture the HTML content of the chat report
+    const chatContent = document.getElementById("results").innerHTML;
+
+    // Add the content to the PDF
+    doc.html(chatContent, {
+        callback: function (doc) {
+            // Save the generated PDF
+            doc.save('whatsapp-chat-report.pdf');
+        },
+        x: 10,
+        y: 10
+    });
+}
+
+const stopWords = [
+    "the",
+    "is",
+    "and",
+    "a",
+    "to",
+    " in ",
+    "for",
+    " of ",
+    "it",
+    "on",
+    "that",
+    "this",
+]; // Basic list of stop words
+
+// function parseChat(data) {
+//     const messages = [];
+//     const dayCount = {};
+//     const responseTimes = {};
+//     const userStats = {};
+//     const wordFrequency = {};
+
+//     const lines = data.split("\n");
+//     let lastTimestamp = null;
+
+//     lines.forEach((line) => {
+//         const match = line.match(
+//             /(\d{2}\/\d{2}\/\d{4}), (\d{2}:\d{2}) - (.*?): (.*)/
+//         );
+//         if (match) {
+//             const [, date, time, sender, message] = match;
+//             messages.push({ date, time, sender, message });
+
+//             // Message Frequency by Day
+//             const day = date.split("/")[0];
+//             dayCount[day] = (dayCount[day] || 0) + 1;
+
+//             // User Statistics
+//             if (!userStats[sender]) {
+//                 userStats[sender] = { messages: 0, activeHours: [] };
+//             }
+//             userStats[sender].messages++;
+//             userStats[sender].activeHours.push(parseInt(time.split(":")[0]));
+
+//             // Response Time Calculation
+//             if (lastTimestamp && lastTimestamp.sender !== sender) {
+//                 const responseTime = calculateTimeDiff(lastTimestamp, {
+//                     date,
+//                     time,
+//                 });
+//                 responseTimes[sender] = (responseTimes[sender] || []).concat(
+//                     responseTime
+//                 );
+//             }
+//             lastTimestamp = { date, time, sender };
+
+//             // Word Frequency Calculation
+//             message.split(" ").forEach((word) => {
+//                 const sanitizedWord = word
+//                     .toLowerCase()
+//                     .replace(/[^a-zA-Z0-9]/g, ""); // Remove punctuation
+//                 if (!stopWords.includes(sanitizedWord) && sanitizedWord) {
+//                     wordFrequency[sanitizedWord] =
+//                         (wordFrequency[sanitizedWord] || 0) + 1;
+//                 }
+//             });
+//         }
+//     });
+
+//     return { messages, dayCount, responseTimes, userStats, wordFrequency };
+// }
 
 function showChat() {
     document.getElementById("chatViewer").style.display = "flex";
@@ -363,73 +511,6 @@ function renderChattingTimeGraph(messages) {
     });
 }
 
-// function renderChattingTimeGraph(messages) {
-//   const ctx = document
-//     .getElementById("chattingTimeChart")
-//     .getContext("2d");
-
-//   const { messagesPerHourSenderOne, messagesPerHourSenderTwo } =
-//     getMessagesPerHour(messages);
-
-//   // Log the data to see if it's correctly populated
-//   console.log(
-//     "Messages per hour for Sender 1:",
-//     messagesPerHourSenderOne
-//   );
-//   console.log(
-//     "Messages per hour for Sender 2:",
-//     messagesPerHourSenderTwo
-//   );
-
-//   // Create an array for the x-axis labels (representing hours from 0 AM to 11 PM)
-//   const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-
-//   new Chart(ctx, {
-//     type: "bar",
-//     data: {
-//       labels: hours, // Labels represent hours of the day (0 AM to 11 PM)
-//       datasets: [
-//         {
-//           label: "Sender 1 Messages",
-//           data: messagesPerHourSenderOne,
-//           backgroundColor: "rgba(75, 192, 192, 0.6)",
-//           borderColor: "rgba(75, 192, 192, 1)",
-//           borderWidth: 1,
-//         },
-//         {
-//           label: "Sender 2 Messages",
-//           data: messagesPerHourSenderTwo,
-//           backgroundColor: "rgba(255, 99, 132, 0.6)",
-//           borderColor: "rgba(255, 99, 132, 1)",
-//           borderWidth: 1,
-//         },
-//       ],
-//     },
-//     options: {
-//       responsive: true,
-//       scales: {
-//         x: {
-//           title: {
-//             display: true,
-//             text: "Time of Day",
-//           },
-//         },
-//         y: {
-//           title: {
-//             display: true,
-//             text: "Number of Messages",
-//           },
-//           beginAtZero: true,
-//           ticks: {
-//             stepSize: 1, // Adjusts the tick step size on the y-axis
-//           },
-//         },
-//       },
-//     },
-//   });
-// }
-
-// Helper function to convert time (and date) to a Date object
 
 function convertTimeToDate(date, time) {
     const [day, month, year] = date.split("/").map((num) => parseInt(num));
