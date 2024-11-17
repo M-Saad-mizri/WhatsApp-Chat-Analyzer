@@ -188,18 +188,12 @@ input {
 .load-btn:hover {
   background-color: #218838;
 }
-.moving-border {
-  /* border: 5px solid #4caf50;
-  padding: 30px;
-  border-radius: 10px;
-  position: relative;
-  animation: moveBorder 3s infinite linear;
-  margin: 0px 10px;
-  width: 91%; */
+#moving-border {
   position: relative;
   padding: 20px;
   border: 5px solid transparent; /* Set the border size */
-  background-color: #fff; /* Background color */
+  /* background-color: #d2a5a5; */
+  background: transparent;
   animation: rotate-border 3s infinite linear;
 }
 
@@ -211,17 +205,27 @@ input {
 }
 #info {
   padding: 10px;
-  border: 3px solid yellow;
+  border: 0.5px solid yellow;
   border-radius: 4px;
-  background-color: rgb(248, 248, 125);
-  color: #171717;
+  /* background-color: rgb(248, 248, 125); */
+  background: transparent;
+  color: #f3ed7a;
 }
 #info2 {
   padding: 10px;
-  border: 3px solid rgb(153, 247, 2);
+  border: 0.5px solid rgb(153, 247, 2);
   border-radius: 4px;
-  background-color: rgb(96, 239, 96);
-  color: #171717;
+  /* background-color: rgb(96, 239, 96); */
+  background: transparent;
+  color: #3af844;
+}
+#info2 a {
+  color: #3af844;
+}
+#input-and-content-div {
+  display: flex;
+  width: 90%;
+  margin-left: 10px;
 }
 @keyframes moveBorder {
   0% {
@@ -238,6 +242,12 @@ input {
   }
 }
 @media only screen and (max-width: 600px) {
+  #input-and-content-div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: -1px;
+  }
   .content-div {
     padding: 15px;
     margin: 10px;
@@ -251,9 +261,13 @@ input {
   #infoo {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 97%;
+    width: 95%;
     margin: 10px;
+  }
+  #info,
+  #info1,
+  #info2 {
+    font-size: 0.9rem;
   }
   .moving-border {
     border: 5px solid #4caf50;

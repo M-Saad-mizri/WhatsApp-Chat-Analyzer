@@ -39,7 +39,6 @@
         This project is <b>open-source</b> and all the code is <b>public</b> on
         <b>GitHub</b>.
         <a
-          style="color: black"
           href="https://github.com/M-Saad-mizri/WhatsApp-Chat-Analyzer"
           target="_blank"
           rel="noopener noreferrer"
@@ -48,34 +47,37 @@
         </a>
       </p>
     </div>
+    <div id="input-and-content-div">
+      <div class="content-div" id="moving-border">
+        <h2>Export WhatsApp Chat and Select File</h2>
+        <p>
+          <span>To begin</span>,<span style="color: aliceblue"
+            >select or drop a .txt or .zip file containing your WhatsApp chat
+            file.</span
+          >
+        </p>
+      </div>
 
-    <div class="content-div" id="moving-border">
-      <h2>Export WhatsApp Chat and Select File</h2>
-      <p>
-        <span>To begin</span>, select or drop a .txt or .zip file containing
-        your WhatsApp chat file.
-      </p>
-    </div>
-
-    <div class="upload-container">
-      <!-- File input for uploading the chat data -->
-      <!-- <label for="chatFile" class="file-label">Choose File</label> -->
-      <div
-        style="
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          gap: 5px;
-          margin-left: -10px;
-        "
-      >
-        <input
-          type="file"
-          class="file-label"
-          id="chatFile"
-          accept=".txt, .zip"
-        />
-        <button class="load-btn" onclick="loadChatData()">Load File</button>
+      <div class="upload-container">
+        <!-- File input for uploading the chat data -->
+        <!-- <label for="chatFile" class="file-label">Choose File</label> -->
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-left: -10px;
+          "
+        >
+          <input
+            type="file"
+            class="file-label"
+            id="chatFile"
+            accept=".txt, .zip"
+          />
+          <button class="load-btn" onclick="loadChatData()">Go</button>
+        </div>
       </div>
     </div>
 
